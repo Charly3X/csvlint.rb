@@ -74,7 +74,11 @@ module Csvlint
 
       found_header = header.to_csv(:row_sep => '')
       expected_header = @fields.map{ |f| f.name }.to_csv(:row_sep => '')
-      if found_header.to_s.upcase != expected_header.to_s.upcase
+      
+      found_header = found_header.to_s.split(',').map{|e| e.strip}.join(',')
+      expected_header = expected_header.to_s.split(',').map{|e| e.strip}.join(',')
+      
+      if found_header.upcase != expected_header.upcase
         build_warnings(:malformed_header, :schema, 1, nil, found_header, "expectedHeader" => expected_header)
       end
       return valid?
